@@ -1,0 +1,216 @@
+@import "tailwindcss";
+
+/* Theme is toggled by a `.dark` class on <html> (boot script + keypress
+   toggle), not the OS preference — so bind Tailwind's `dark:` variant to that
+   class rather than the default prefers-color-scheme media query. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --bg: #f9f9f8;
+  --text: #1f1f1a;
+  --text-secondary: #636360;
+  --text-tertiary: #9a9a96;
+  --line: rgba(0, 0, 0, 0.08);
+  --hover-surface: rgba(0, 0, 0, 0.03);
+  /* Cursor on the light canvas: light fill with a black outline. */
+  --cursor-fill: #f9f9f8;
+  --cursor-stroke: #1f1f1a;
+
+  /* Per-product accents — used only on links */
+  --creed: #2563eb;
+  --kram: #16a34a;
+  --winnow: #ea580c;
+  --praes: #db2777;
+}
+
+/* Dark theme. Resolved to a `.dark` class on <html> by the inline boot script
+   (defaults to the system/browser preference, overridable via the hidden
+   keypress toggle). */
+.dark {
+  --bg: #0e0e0d;
+  --text: #e7e7e2;
+  --text-secondary: #a3a39e;
+  --text-tertiary: #6f6f6a;
+  --line: rgba(255, 255, 255, 0.08);
+  --hover-surface: rgba(255, 255, 255, 0.035);
+  /* Inverted on the dark canvas: dark fill with a light outline. */
+  --cursor-fill: #0e0e0d;
+  --cursor-stroke: #e7e7e2;
+
+  --creed: #5b8cff;
+  --kram: #3ecf7f;
+  --winnow: #ff8a4c;
+  --praes: #ff6fae;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  margin: 0;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--creed) 22%, transparent);
+}
+
+/* Theme flip uses a circular clip-path reveal (see theme-key). Kill the
+   default cross-fade so the new theme wipes in cleanly over the old one. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+/* Custom smooth cursor — hide the native one once it's active */
+.has-smooth-cursor,
+.has-smooth-cursor * {
+  cursor: none !important;
+}
+
+.smooth-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  /* Pivot at the arrow tip (displayed 12.5,2.5) so rotation/scale read from the
+     pointer point. The JS offsets translate by (-12.5,-2.5) to match. */
+  transform-origin: 12.5px 2.5px;
+  transition: opacity 0.25s ease;
+  will-change: transform;
+}
+.smooth-cursor svg {
+  display: block;
+}
+
+@media (pointer: coarse) {
+  .smooth-cursor {
+    display: none;
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+/* Separator line */
+.sep {
+  height: 1px;
+  width: 100%;
+  background: var(--line);
+}
+
+/* Product title — linked fades on hover, no-link shakes to say "nowhere to go" */
+.product-title {
+  display: inline-block;
+  transition: opacity 0.2s ease;
+}
+a.product-title:hover {
+  opacity: 0.65;
+}
+span.product-title {
+  cursor: default;
+}
+/* Brandmark beside the title — tinted to the product accent via mask. */
+.product-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  /* Flex `gap` doesn't apply between the icon and the bare text node, so the
+     spacing lives here as an explicit margin. */
+  margin-right: 0.3rem;
+  /* Nudge down to the text's optical centre (glyphs sit below the line's
+     geometric middle, so a perfectly centred icon reads as too high). */
+  position: relative;
+  top: 2px;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+/* One-shot shake — added on enter, removed on animationend, so it always
+   plays to completion even if the pointer leaves mid-shake. */
+.product-title.shaking {
+  animation: wiggle 0.45s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-title.shaking {
+    animation: none;
+  }
+}
+
+/* Cursor spotlight — brightens subtext to primary within a radius of the pointer */
+.spotlight {
+  position: relative;
+}
+.spotlight-base {
+  color: var(--text-secondary);
+}
+.spotlight-glow {
+  position: absolute;
+  inset: 0;
+  color: var(--glow-color, var(--text));
+  pointer-events: none;
+  user-select: none;
+  opacity: var(--glow-o, 0);
+  transition: opacity 0.35s ease;
+  -webkit-mask-image: radial-gradient(
+    150px circle at var(--mx, -200px) var(--my, -200px),
+    #000 0%,
+    #000 42%,
+    rgba(0, 0, 0, 0.6) 64%,
+    transparent 84%
+  );
+  mask-image: radial-gradient(
+    150px circle at var(--mx, -200px) var(--my, -200px),
+    #000 0%,
+    #000 42%,
+    rgba(0, 0, 0, 0.6) 64%,
+    transparent 84%
+  );
+}
+@media (prefers-reduced-motion: reduce) {
+  .spotlight-glow {
+    display: none;
+  }
+}
