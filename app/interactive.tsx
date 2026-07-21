@@ -2,6 +2,7 @@
 
 import { useRef, type ReactNode } from "react";
 import { fireConfetti } from "./confetti";
+import { TooltipAnchor } from "./tooltip-anchor";
 
 /**
  * Renders text twice: a secondary-grey base and a primary-colour overlay
@@ -66,12 +67,8 @@ export function Keyword({
   tooltip: string;
 }) {
   return (
-    <span
-      className="keyword"
-      data-tooltip={tooltip}
-      tabIndex={0}
-    >
+    <TooltipAnchor className="keyword" tooltip={tooltip} tabIndex={0}>
       {children}
-    </span>
+    </TooltipAnchor>
   );
 }

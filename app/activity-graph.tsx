@@ -1,3 +1,5 @@
+import { TooltipAnchor } from "./tooltip-anchor";
+
 type ActivityDay = {
   date: string;
   count: number;
@@ -215,21 +217,42 @@ export async function ActivityGraph() {
   const days = await getActivity();
   const cells = calendarCells(days);
 
-  return (
-    <div className="activity-scroll" aria-label="GitHub contribution activity for the past year">
-      <div className="activity-grid">
-        {cells.map((day) => (
-          <span
-            key={day.date}
-            className="activity-day"
-            data-level={day.level}
-            data-project={day.project}
-            data-tooltip={day.count > 0 ? formatTooltip(day) : undefined}
-            aria-label={formatTooltip(day)}
-            tabIndex={day.count > 0 ? 0 : undefined}
-          />
-        ))}
+  function grid(gridCells: ActivityDay[], className: string) {
+    return (
+      <div className={className}>
+        {gridCells.map((day) =>
+          day.count > 0 ? (
+            <TooltipAnchor
+              key={day.date}
+              className="activity-day"
+              tooltip={formatTooltip(day)}
+              data-level={day.level}
+              data-project={day.project}
+              aria-label={formatTooltip(day)}
+              tabIndex={0}
+            />
+          ) : (
+            <span
+              key={day.date}
+              className="activity-day"
+              data-level={day.level}
+              data-project={day.project}
+              aria-label={formatTooltip(day)}
+            />
+          ),
+        )}
       </div>
-    </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="activity-scroll activity-scroll-desktop" aria-label="GitHub contribution activity for the past year">
+        {grid(cells, "activity-grid")}
+      </div>
+      <div className="activity-scroll activity-scroll-mobile" aria-label="Recent GitHub contribution activity">
+        {grid(cells.slice(-30 * 7), "activity-grid activity-grid-mobile")}
+      </div>
+    </>
   );
 }
