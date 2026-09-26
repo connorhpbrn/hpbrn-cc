@@ -1,6 +1,6 @@
 # hpbrn.cc
 
-My personal site. A short introduction, selected projects, recent GitHub
+My personal site. A short introduction, writing, selected projects, recent GitHub
 activity, and ways to reach me.
 
 ## Stack
@@ -17,6 +17,10 @@ npm run dev
 ```
 
 Then open [localhost:3000](http://localhost:3000).
+
+## Writing
+
+- [Preserve lucidity](writing/lucidity.md)
 
 ## Project
 

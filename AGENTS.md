@@ -12,7 +12,7 @@ this file in the same pass.
 
 ## What this is
 
-A single-page personal site: intro, a project card, GitHub activity,
+A single-page personal site: intro, writing, a project card, GitHub activity,
 and connect links. It is not a product, blog platform, or dashboard.
 
 No blog index, CMS, auth, or extra routes. No new dependencies without a
@@ -29,6 +29,7 @@ Tailwind v4   motion/react   Geist
 
 ```
 app/          the site
+writing/      one markdown file per essay
 public/images/ project art
 public/logos/  identity images
 ```
@@ -69,10 +70,17 @@ Use the CSS variables. Do not invent a second palette.
 ### Motion
 
 - Easing: `cubic-bezier(0.22, 1, 0.36, 1)`
+- Reading transition: `0.48s`
 - Shorter pops: `160ms`
 - Nearby tooltip handoff uses one persistent Motion spring for position.
   Initial and distant hovers jump to the target before the bubble opens.
 - Use Motion for interactive animation.
+
+Opening a writing piece collapses everything else. Clip edges meet the
+viewport, not an inset padding box. Reading chrome uses measured height
+plus `overflow: hidden`, so box-shadows and padding clip unless they sit
+inside the measured box (`p-0.5` on the project grid and connect row
+exists for this).
 
 ### Copy
 
@@ -102,13 +110,33 @@ support.
 ### Surfaces
 
 - Intro: name, bio, keyword asides
+- Writing: one open piece at a time
 - Projects: Creed card with view-site and view-repo
 - Activity: contribution heatmap
 - Connect: theme, X, GitHub, Instagram, email, then a Discord online tag
   and an hpbrn tag
 
+Writing source: `writing/lucidity.md`. Rendered essay with keywords still
+lives in `app/lucidity.tsx`.
+
 The tab icon is `app/favicon.ico`. Do not replace it with a mini OG card,
 `app/icon.png`, or an `og:image` tag.
+
+---
+
+## Writing files
+
+Every essay is `writing/<word>.md`. The filename is **one word** from the
+title. Lowercase, no spaces, no dates, no extra folders.
+
+- Title `Preserve lucidity` → `writing/lucidity.md`
+- Title `On Taste` → `writing/taste.md`
+
+Do not use `preserve-lucidity.md`, `lucidity-essay.md`, or `content/`.
+
+When adding a piece: create that file with a `#` title, put the full text
+there, and wire the site from it. Do not leave a second markdown copy
+elsewhere.
 
 ---
 
