@@ -66,6 +66,54 @@ body {
   transition: color 160ms ease;
 }
 
+.project-preview {
+  border-radius: 0.5rem;
+  background: var(--tooltip-surface);
+  box-shadow: 0 0 0 2px var(--activity-empty);
+}
+
+.project-preview > img {
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.project-preview-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 0.35rem;
+  border: 1px solid transparent;
+  background: var(--creed);
+  padding: 0.24rem 0.48rem;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1;
+  transition: opacity 160ms ease;
+}
+
+.project-preview-cta:hover {
+  opacity: 0.78;
+}
+
+.project-preview-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 0.35rem;
+  border: 1px solid color-mix(in srgb, var(--text) 18%, transparent);
+  background: transparent;
+  padding: 0.24rem 0.48rem;
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1;
+  transition: opacity 160ms ease;
+}
+
+.project-preview-cta-secondary:hover {
+  opacity: 0.78;
+}
+
 .connect-card {
   display: inline-flex;
   align-items: center;

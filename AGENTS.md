@@ -12,7 +12,8 @@ this file in the same pass.
 
 ## What this is
 
-A single-page personal site: intro, GitHub activity, and connect links. It is not a product, blog platform, or dashboard.
+A single-page personal site: intro, a project card, GitHub activity,
+and connect links. It is not a product, blog platform, or dashboard.
 
 No blog index, CMS, auth, or extra routes. No new dependencies without a
 reason in the commit.
@@ -28,6 +29,7 @@ Tailwind v4   motion/react   Geist
 
 ```
 app/          the site
+public/images/ project art
 public/logos/  identity images
 ```
 
@@ -100,6 +102,7 @@ support.
 ### Surfaces
 
 - Intro: name, bio, keyword asides
+- Projects: Creed card with view-site and view-repo
 - Activity: contribution heatmap
 - Connect: theme, X, GitHub, Instagram, email, then a Discord online tag
   and an hpbrn tag

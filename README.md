@@ -1,7 +1,7 @@
 # hpbrn.cc
 
-My personal site. A short introduction, recent GitHub activity,
-and ways to reach me.
+My personal site. A short introduction, selected projects, recent GitHub
+activity, and ways to reach me.
 
 ## Stack
 
@@ -17,6 +17,10 @@ npm run dev
 ```
 
 Then open [localhost:3000](http://localhost:3000).
+
+## Project
+
+- [Creed](https://creed.md): one open-source profile that gives every AI your context.
 
 ## Connect
 
